@@ -1,7 +1,7 @@
 import * as addressService from '../services/address-service.js';
-
+import Address from '../models/address.js';
 export function State() {
-    
+    this.address = new Address();
 
     this.btnSave = null;
     this.btnClear = null;
@@ -30,6 +30,7 @@ export function init() {
     state.errorNumber = document.querySelector('[data-error="number"]');
 
     state.inputNumber.addEventListener('change', handleInputNumberChange);
+    state.inputNumber.addEventListener('keyup', handleInputNumberKeyup);
 
     state.btnClear.addEventListener('click', handleBtnClearClick);
     state.btnSave.addEventListener('click', handleBtnSaveClick);
@@ -42,6 +43,11 @@ export function init() {
 
 }
 
+function handleInputNumberKeyup(event) {
+    state.address.number = event.target.value;
+}
+
+
 async function handleInputCepChange(event) {
     
     try {
@@ -51,6 +57,7 @@ async function handleInputCepChange(event) {
 
         state.inputStreet.value = address.street;
         state.inputCity.value = address.city;
+        state.address = address;
 
         setFormError("cep", "");
         state.inputNumber.focus();
