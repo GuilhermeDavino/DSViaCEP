@@ -101,6 +101,7 @@ html, body {
     color: #fff;
     font-size: 14px;
     font-weight: 700;
+    cursor: pointer;
 }
 
 .btn-left {

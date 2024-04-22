@@ -1,12 +1,11 @@
-import Address from "../models/address.js";
-
+import * as addressService from '../services/address-service.js';
 
 export function State() {
-    this.address = new Address();
     
+
     this.btnSave = null;
     this.btnClear = null;
-   
+
     this.inputCep = null;
     this.inputStreet = null;
     this.inputNumber = null;
@@ -27,16 +26,54 @@ export function init() {
     state.btnSave = document.forms.newAddress.btnSave;
     state.btnClear = document.forms.newAddress.btnClear;
 
-    state.errorCep =  document.querySelector('[data-error="cep"]');
-    state.errorNumber =  document.querySelector('[data-error="number"]');
+    state.errorCep = document.querySelector('[data-error="cep"]');
+    state.errorNumber = document.querySelector('[data-error="number"]');
 
     state.inputNumber.addEventListener('change', handleInputNumberChange);
-    
+
     state.btnClear.addEventListener('click', handleBtnClearClick);
+    state.btnSave.addEventListener('click', handleBtnSaveClick);
+
+    state.inputCep.addEventListener('change', handleInputCepChange)
+
+
+    
+   
+
+}
+
+async function handleInputCepChange(event) {
+    
+    try {
+        const cep = event.target.value.toString();
+    
+        const address = await addressService.findByCep(cep.replace("-", ""));
+
+        state.inputStreet.value = address.street;
+        state.inputCity.value = address.city;
+
+        setFormError("cep", "");
+        state.inputNumber.focus();
+    }
+    catch(e) {
+        state.inputStreet.value = "";
+        state.inputCity.value = "";
+        setFormError("cep", "informe um CEP válido");
+        
+    }
+
+    
+    
+}
+
+async function handleBtnSaveClick(event) {
+    event.preventDefault();
+    console.log(event.target);
+
 }
 
 function handleInputNumberChange(event) {
-    if(event.target.value == "") {
+    if (event.target.value == "") {
         setFormError("number", "Campo Requerido");
     } else {
         setFormError("number", "");
