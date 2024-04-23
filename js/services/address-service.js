@@ -13,3 +13,17 @@ export async function findByCep(cep) {
 
 
 }
+
+export function getErrors(address) {
+    const errors = {};
+
+    if(!address.cep || address.cep == "") {
+        errors.cep = "Campo Requerido";
+    }
+
+    if(!address.number || address.number == "") {
+        errors.number = "Campo Requerido";
+    }
+
+    return errors;
+}
